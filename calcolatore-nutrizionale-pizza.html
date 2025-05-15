@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Calcolatore Nutrizionale Pizza</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #fdfbf3; padding: 20px; }
+    h1 { color: #d35400; }
+    .ingrediento { margin: 4px 0; }
+    .risultato { margin-top: 20px; padding: 15px; background-color: #f4f4f4; border: 1px solid #ccc; max-width: 400px; }
+    .btn { margin-top: 10px; padding: 10px 20px; background-color: #27ae60; color: white; border: none; cursor: pointer; }
+    .btn:hover { background-color: #219150; }
+  </style>
+</head>
+<body>
+  <h1>Calcolatore Nutrizionale Pizza</h1>
+  <p>Seleziona gli ingredienti per conoscere i valori nutrizionali della tua pizza (calcolati in base alle porzioni reali).</p>
+  <form id="form">
+    <div id="ingredienti"></div>
+    <button type="button" class="btn" onclick="calcolaValori()">Calcola valori nutrizionali</button>
+  </form>
+  <div class="risultato" id="output"></div>
+
+  <script>
+    const ingredienti = [
+      { nome: "Polpa di pomodoro", grammi: 80, kcal: 33, grassi: 0.6, saturi: 0.0, carbo: 5.2, zuccheri: 4.1, prot: 1.2, sale: 0.3 },
+      { nome: "Mozzarella di bufala", grammi: 100, kcal: 288, grassi: 25, saturi: 17, carbo: 0.8, zuccheri: 0.5, prot: 15, sale: 0.56 },
+      { nome: "Gorgonzola Dolce", grammi: 40, kcal: 325, grassi: 27.4, saturi: 19.1, carbo: 0.6, zuccheri: 0.1, prot: 19, sale: 2.04 },
+      { nome: "Provola affumicata", grammi: 60, kcal: 333, grassi: 26.5, saturi: 18.8, carbo: 0.1, zuccheri: 0.1, prot: 23.5, sale: 0.9 },
+      { nome: "Fiore Sardo", grammi: 35, kcal: 400, grassi: 32, saturi: 28, carbo: 0.5, zuccheri: 0.5, prot: 30, sale: 1.85 },
+      { nome: "Grana Padano", grammi: 20, kcal: 398, grassi: 29, saturi: 18, carbo: 0, zuccheri: 0, prot: 33, sale: 1.5 },
+      { nome: "Prosciutto crudo", grammi: 50, kcal: 297, grassi: 19, saturi: 6.3, carbo: 0.5, zuccheri: 0.5, prot: 31, sale: 6.0 },
+      { nome: "Salsiccia piccante", grammi: 60, kcal: 492, grassi: 45, saturi: 16, carbo: 0.8, zuccheri: 0.8, prot: 21, sale: 4.2 },
+      { nome: "Pancetta lardellata", grammi: 80, kcal: 466, grassi: 44.9, saturi: 17.3, carbo: 0.17, zuccheri: 0.1, prot: 5.0, sale: 1.0 },
+      { nome: "Wurstel", grammi: 100, kcal: 240, grassi: 20, saturi: 6.1, carbo: 0, zuccheri: 0, prot: 15, sale: 3.2 }
+    ];
+
+    const container = document.getElementById("ingredienti");
+    ingredienti.forEach((ing, i) => {
+      const el = document.createElement("div");
+      el.className = "ingrediento";
+      el.innerHTML = `<input type='checkbox' id='ing${i}' value='${i}'> ${ing.nome} (${ing.grammi}g)`;
+      container.appendChild(el);
+    });
+
+    function calcolaValori() {
+      let kcal = 0, grassi = 0, saturi = 0, carbo = 0, zuccheri = 0, prot = 0, sale = 0;
+      document.querySelectorAll("input[type='checkbox']:checked").forEach(el => {
+        const ing = ingredienti[el.value];
+        const fattore = ing.grammi / 100;
+        kcal += ing.kcal * fattore;
+        grassi += ing.grassi * fattore;
+        saturi += ing.saturi * fattore;
+        carbo += ing.carbo * fattore;
+        zuccheri += ing.zuccheri * fattore;
+        prot += ing.prot * fattore;
+        sale += ing.sale * fattore;
+      });
+      document.getElementById("output").innerHTML =
+        `<strong>Valori nutrizionali totali:</strong><br>
+        Calorie: ${kcal.toFixed(1)} kcal<br>
+        Grassi: ${grassi.toFixed(1)} g<br>
+        Saturi: ${saturi.toFixed(1)} g<br>
+        Carboidrati: ${carbo.toFixed(1)} g<br>
+        Zuccheri: ${zuccheri.toFixed(1)} g<br>
+        Proteine: ${prot.toFixed(1)} g<br>
+        Sale: ${sale.toFixed(2)} g`;
+    }
+  </script>
+</body>
+</html>
